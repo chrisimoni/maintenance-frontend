@@ -12,7 +12,7 @@ services:
     envVars:
       # Must match the deployed backend service name on Render
       - key: VITE_API_URL
-        value: https://maintenance-backend.onrender.com
+        value: https://maintenance-backend-1cj1.onrender.com
 
     # SPA fallback — all unknown paths serve index.html for React Router
     routes:
