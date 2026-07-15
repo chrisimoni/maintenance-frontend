@@ -99,36 +99,38 @@ export const RequestListPage = () => {
             ) : undefined} />
         ) : (
           <>
-            <table className="w-full">
-              <thead className="bg-gray-50/80 border-b border-gray-100">
-                <tr>
-                  <th className="table-header">Request</th>
-                  <th className="table-header">Category</th>
-                  <th className="table-header">Location</th>
-                  {isAdmin && <th className="table-header">Submitter</th>}
-                  <th className="table-header">Priority</th>
-                  <th className="table-header">Status</th>
-                  <th className="table-header">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.content.map(req => (
-                  <tr key={req.id} className="table-row cursor-pointer"
-                    onClick={() => navigate(`/requests/${req.id}`)}>
-                    <td className="table-cell">
-                      <p className="font-medium text-gray-900 truncate max-w-[220px]">{req.title}</p>
-                      <p className="text-xs text-gray-400">#{req.id}</p>
-                    </td>
-                    <td className="table-cell text-gray-600">{req.categoryName}</td>
-                    <td className="table-cell text-gray-600 truncate max-w-[140px]">{req.location}</td>
-                    {isAdmin && <td className="table-cell text-gray-600">{req.submitter.name}</td>}
-                    <td className="table-cell"><PriorityBadge priority={req.priority} /></td>
-                    <td className="table-cell"><StatusBadge status={req.status} /></td>
-                    <td className="table-cell text-gray-500 whitespace-nowrap">{formatDate(req.createdAt)}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px]">
+                <thead className="bg-gray-50/80 border-b border-gray-100">
+                  <tr>
+                    <th className="table-header">Request</th>
+                    <th className="table-header">Category</th>
+                    <th className="table-header">Location</th>
+                    {isAdmin && <th className="table-header">Submitter</th>}
+                    <th className="table-header">Priority</th>
+                    <th className="table-header">Status</th>
+                    <th className="table-header">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data?.content.map(req => (
+                    <tr key={req.id} className="table-row cursor-pointer"
+                      onClick={() => navigate(`/requests/${req.id}`)}>
+                      <td className="table-cell">
+                        <p className="font-medium text-gray-900 truncate max-w-[220px]">{req.title}</p>
+                        <p className="text-xs text-gray-400">#{req.id}</p>
+                      </td>
+                      <td className="table-cell text-gray-600">{req.categoryName}</td>
+                      <td className="table-cell text-gray-600 truncate max-w-[140px]">{req.location}</td>
+                      {isAdmin && <td className="table-cell text-gray-600">{req.submitter.name}</td>}
+                      <td className="table-cell"><PriorityBadge priority={req.priority} /></td>
+                      <td className="table-cell"><StatusBadge status={req.status} /></td>
+                      <td className="table-cell text-gray-500 whitespace-nowrap">{formatDate(req.createdAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <div className="px-5 pb-4">
               <Pagination page={page} totalPages={data?.totalPages ?? 1}
                 totalElements={data?.totalElements ?? 0} size={15} onPage={setPage} />

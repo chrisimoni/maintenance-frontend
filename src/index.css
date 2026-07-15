@@ -70,7 +70,7 @@
   .table-row    { @apply border-b border-gray-50 hover:bg-gray-50/60 transition-colors; }
 
   /* Page header */
-  .page-header  { @apply mb-6 flex items-center justify-between; }
+  .page-header  { @apply mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3; }
   .page-title   { @apply text-xl font-bold text-gray-900; }
   .page-sub     { @apply text-sm text-gray-500 mt-0.5; }
 }

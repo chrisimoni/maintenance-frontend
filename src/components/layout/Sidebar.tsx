@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ClipboardList, PlusCircle, Users,
-  Wrench, Tags, FileBarChart, LogOut, ShieldCheck,
+  Wrench, Tags, FileBarChart, LogOut, ShieldCheck, X,
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { cn } from '../../utils'
@@ -40,7 +40,12 @@ const adminNav: NavItem[] = [
   { to: '/reports',      icon: FileBarChart,    label: 'Reports' },
 ]
 
-export const Sidebar = () => {
+interface SidebarProps {
+  open: boolean
+  onClose: () => void
+}
+
+export const Sidebar = ({ open, onClose }: SidebarProps) => {
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
 
@@ -52,45 +57,68 @@ export const Sidebar = () => {
   const handleLogout = () => { logout(); navigate('/login') }
 
   return (
-    <aside className="fixed inset-y-0 left-0 w-60 flex flex-col z-30"
-      style={{ background: 'linear-gradient(160deg, #2B5BA8 0%, #1d3f76 100%)' }}>
+    <>
+      {/* Mobile backdrop */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/40 z-20 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
 
-      {/* Logo */}
-      <div className="px-4 py-5 border-b border-white/10">
-        <MivaLogo />
-      </div>
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 w-64 sm:w-60 flex flex-col z-30 transition-transform duration-200 ease-out',
+          'md:translate-x-0',
+          open ? 'translate-x-0' : '-translate-x-full',
+        )}
+        style={{ background: 'linear-gradient(160deg, #2B5BA8 0%, #1d3f76 100%)' }}>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ to, icon: Icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => cn('sidebar-link', isActive && 'sidebar-link-active')}
-          >
-            <Icon size={17} />
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* User + logout */}
-      <div className="px-3 py-4 border-t border-white/10">
-        <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-xs font-bold">
-              {user?.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
-            </span>
-          </div>
-          <div className="min-w-0">
-            <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
-            <p className="text-white/50 text-[10px] truncate">{user?.role}</p>
-          </div>
+        {/* Logo */}
+        <div className="px-4 py-5 border-b border-white/10 flex items-center justify-between">
+          <MivaLogo />
+          <button
+            onClick={onClose}
+            className="md:hidden text-white/70 hover:text-white p-1.5 -mr-1.5 rounded-lg hover:bg-white/10"
+            aria-label="Close menu">
+            <X size={20} />
+          </button>
         </div>
-        <button onClick={handleLogout} className="sidebar-link w-full">
-          <LogOut size={16} /> Sign out
-        </button>
-      </div>
-    </aside>
+
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+          {navItems.map(({ to, icon: Icon, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={onClose}
+              className={({ isActive }) => cn('sidebar-link', isActive && 'sidebar-link-active')}
+            >
+              <Icon size={17} />
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* User + logout */}
+        <div className="px-3 py-4 border-t border-white/10">
+          <div className="flex items-center gap-3 px-3 py-2 mb-1">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-white text-xs font-bold">
+                {user?.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+              </span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
+              <p className="text-white/50 text-[10px] truncate">{user?.role}</p>
+            </div>
+          </div>
+          <button onClick={handleLogout} className="sidebar-link w-full">
+            <LogOut size={16} /> Sign out
+          </button>
+        </div>
+      </aside>
+    </>
   )
 }

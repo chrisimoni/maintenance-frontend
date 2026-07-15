@@ -66,50 +66,52 @@ export const UsersPage = () => {
           <EmptyState icon={Users} title="No users found" />
         ) : (
           <>
-            <table className="w-full">
-              <thead className="bg-gray-50/80 border-b border-gray-100">
-                <tr>
-                  <th className="table-header">Name</th>
-                  <th className="table-header">Email</th>
-                  <th className="table-header">Role</th>
-                  <th className="table-header">Department</th>
-                  <th className="table-header">Status</th>
-                  <th className="table-header">Joined</th>
-                  <th className="table-header">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.content.map(u => (
-                  <tr key={u.id} className="table-row">
-                    <td className="table-cell font-medium text-gray-900">{u.name}</td>
-                    <td className="table-cell text-gray-600">{u.email}</td>
-                    <td className="table-cell"><RoleBadge role={u.role} /></td>
-                    <td className="table-cell text-gray-500">{u.department || '—'}</td>
-                    <td className="table-cell">
-                      <span className={`badge ${u.enabled ? 'badge-completed' : 'badge-rejected'}`}>
-                        {u.enabled ? 'Active' : 'Disabled'}
-                      </span>
-                    </td>
-                    <td className="table-cell text-gray-500 whitespace-nowrap">{formatDate(u.createdAt)}</td>
-                    <td className="table-cell">
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => toggleMutation.mutate({ id: u.id, enable: !u.enabled })}
-                          className={`btn btn-sm ${u.enabled ? 'btn-ghost text-amber-600' : 'btn-ghost text-emerald-600'}`}
-                          title={u.enabled ? 'Disable' : 'Enable'}>
-                          {u.enabled ? <UserX size={15} /> : <UserCheck size={15} />}
-                        </button>
-                        <button
-                          onClick={() => { if (confirm(`Delete ${u.name}?`)) deleteMutation.mutate(u.id) }}
-                          className="btn btn-sm btn-ghost text-red-500" title="Delete">
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[760px]">
+                <thead className="bg-gray-50/80 border-b border-gray-100">
+                  <tr>
+                    <th className="table-header">Name</th>
+                    <th className="table-header">Email</th>
+                    <th className="table-header">Role</th>
+                    <th className="table-header">Department</th>
+                    <th className="table-header">Status</th>
+                    <th className="table-header">Joined</th>
+                    <th className="table-header">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data?.content.map(u => (
+                    <tr key={u.id} className="table-row">
+                      <td className="table-cell font-medium text-gray-900">{u.name}</td>
+                      <td className="table-cell text-gray-600">{u.email}</td>
+                      <td className="table-cell"><RoleBadge role={u.role} /></td>
+                      <td className="table-cell text-gray-500">{u.department || '—'}</td>
+                      <td className="table-cell">
+                        <span className={`badge ${u.enabled ? 'badge-completed' : 'badge-rejected'}`}>
+                          {u.enabled ? 'Active' : 'Disabled'}
+                        </span>
+                      </td>
+                      <td className="table-cell text-gray-500 whitespace-nowrap">{formatDate(u.createdAt)}</td>
+                      <td className="table-cell">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => toggleMutation.mutate({ id: u.id, enable: !u.enabled })}
+                            className={`btn btn-sm ${u.enabled ? 'btn-ghost text-amber-600' : 'btn-ghost text-emerald-600'}`}
+                            title={u.enabled ? 'Disable' : 'Enable'}>
+                            {u.enabled ? <UserX size={15} /> : <UserCheck size={15} />}
+                          </button>
+                          <button
+                            onClick={() => { if (confirm(`Delete ${u.name}?`)) deleteMutation.mutate(u.id) }}
+                            className="btn btn-sm btn-ghost text-red-500" title="Delete">
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <div className="px-5 pb-4">
               <Pagination page={page} totalPages={data?.totalPages ?? 1}
                 totalElements={data?.totalElements ?? 0} size={20} onPage={setPage} />

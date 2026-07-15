@@ -98,16 +98,16 @@ export const RequestDetailPage = () => {
         <button onClick={() => navigate(-1)} className="btn-ghost btn btn-sm mb-3">
           <ArrowLeft size={15} /> Back
         </button>
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-1">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-1 flex-wrap">
               <span className="text-xs text-gray-400 font-mono">#{req.id}</span>
               <StatusBadge status={req.status} />
               <PriorityBadge priority={req.priority} />
             </div>
             <h1 className="text-xl font-bold text-gray-900">{req.title}</h1>
           </div>
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="flex gap-2 flex-wrap sm:flex-shrink-0">
             {canAssign && (
               <button onClick={() => setAssignModal(true)} className="btn-primary btn">
                 <UserCheck size={15} /> Assign Officer
